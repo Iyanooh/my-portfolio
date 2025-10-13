@@ -3,17 +3,14 @@ version: "3.9"
 services:
   frontend:
     build: .
-    container_name: my-portfolio-frontend
+    container_name: portfolio-frontend
     command: npm run dev -- --host 0.0.0.0
     ports:
       - "5173:5173"
-    volumes:
-      - .:/app
-      - /app/node_modules   # prevent overwriting node_modules with host
     environment:
-     - VITE_API_URL=http://localhost:5000
-    stdin_open: true
-    tty: true
+      - VITE_API_URL=${BACKEND_URL}
+    depends_on:
+      - backend
     restart: always
 
   backend:
@@ -21,16 +18,16 @@ services:
     container_name: portfolio-backend
     ports:
       - "5000:5000"
-    volumes:
-      - ./backend:/app
-      - /app/node_modules   # keep node_modules inside container
+    environment:
+      - MONGO_URL=${MONGO_URL}
+      - PORT=5000
     depends_on:
       - mongo
-    restart: always         # ensures backend restarts if it crashes
+    restart: always
 
   mongo:
     image: mongo:latest
-    container_name: my-portfolio-mongo
+    container_name: portfolio-mongo
     ports:
       - "27017:27017"
     volumes:
