@@ -2,32 +2,32 @@ export default function Projects() {
   // Example list of projects (we can replace with real ones later)
   const projects = [
     {
-      title: "Bursary Management System",
+      title: "Munjeme Academy Management System",
       description:
-        "An online system built with PHP, MySQL, and JavaScript for managing student bursary applications.",
-      image: "https://via.placeholder.com/300x200",
+        "It's an Academy Management Information System that Manages Young players data",
+      image: "/kids.jpg",
       link: "#",
     },
     {
-      title: "Portfolio Website",
+      title: "Pharmacy Management Information System",
       description:
-        "A personal portfolio built with React, Docker, and deployed for global access.",
-      image: "https://via.placeholder.com/300x200",
+        "It's a Management Information System that manages all sales records and manages core functions of a pharmacy",
+      image: "/pharmacy.jpg",
       link: "#",
     },
     {
-      title: "Shop Management System",
+      title: "Hospital Management Information System",
       description:
-        "A shop system handling sales, stock, customers, invoices, and reports using PHP and MySQL.",
-      image: "https://via.placeholder.com/300x200",
+        "A Hospital Grade Information System that Manages Data In Hospitals,Dispensary and Pharmacy Section",
+      image: "/hospital.jpg",
       link: "#",
     },
   ];
 
   return (
     <section style={{ padding: "2rem" }}>
-      <h2>My Projects</h2>
-      <p>Here are some of the projects I’ve worked on:</p>
+      <h2 style={{ textAlign: "center" }}>My Projects</h2>
+      <p style={{ textAlign: "center" }}>Here are some of the projects I’ve worked on:</p>
 
       {/* Project Cards Grid */}
       <div

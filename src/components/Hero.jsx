@@ -26,7 +26,7 @@ export default function Hero() {
           animation: "fadeInOut 4s infinite",
         }}
       >
-        Hi, I’m Developer Ian Wambui
+        Developer Ian Gachengeci
       </h1>
 
       {/* Animated sub-text */}

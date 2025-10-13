@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
   frontend:
     build: .
@@ -9,5 +10,32 @@ services:
     volumes:
       - .:/app
       - /app/node_modules   # prevent overwriting node_modules with host
+    environment:
+     - VITE_API_URL=http://localhost:5000
     stdin_open: true
     tty: true
+    restart: always
+
+  backend:
+    build: ./backend
+    container_name: portfolio-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules   # keep node_modules inside container
+    depends_on:
+      - mongo
+    restart: always         # ensures backend restarts if it crashes
+
+  mongo:
+    image: mongo:latest
+    container_name: my-portfolio-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: always
+
+volumes:
+  mongo-data:

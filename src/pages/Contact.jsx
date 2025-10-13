@@ -1,106 +1,92 @@
+import { useState } from "react";
+
 export default function Contact() {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState("");
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log("Input changed:", e.target.name, e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("Sending...");
+    console.log("Submitting form with data:", formData);
+
+    try {
+      const API_URL = import.meta.env.VITE_API_URL;
+      console.log("Using API URL:", API_URL);
+
+      const res = await fetch(`${API_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      console.log("Fetch response object:", res);
+
+      // Check if response is okay
+      if (!res.ok) {
+        console.error("Response not OK:", res.status, res.statusText);
+        setStatus(`❌ HTTP Error: ${res.status}`);
+        return;
+      }
+
+      const data = await res.json();
+      console.log("Response data:", data);
+
+      if (data.success) {
+        setStatus("✅ Message sent!");
+        alert("Message sent successfully!");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        setStatus("❌ Failed to send: " + data.error);
+        alert("Failed to send: " + data.error);
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setStatus("❌ Error: " + err.message);
+      alert("Fetch error: " + err.message);
+    }
+  };
+
   return (
     <section style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}>
-      <h2>Contact Me</h2>
-      <p>
-        I’d love to hear from you! Whether you have a question, a project idea,
-        or just want to connect, feel free to reach out.
-      </p>
+      <h2 style={{ textAlign: "center" }}>Contact Me</h2>
 
-      {/* Contact Info */}
-      <div style={{ margin: "1.5rem 0" }}>
-        <p>
-          📧 Email:{" "}
-          <a href="mailto:yourname@example.com">yourname@example.com</a>
-        </p>
-        <p>📞 Phone: +254 700 000 000</p>
-      </div>
-
-      {/* Social Media Links */}
-      <div style={{ margin: "1.5rem 0" }}>
-        <h3>Find me on</h3>
-        <ul
-          style={{
-            listStyle: "none",
-            display: "flex",
-            gap: "1rem",
-            padding: 0,
-          }}
-        >
-          <li>
-            <a
-              href="https://github.com/yourusername"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "#222", textDecoration: "none" }}
-            >
-              🐙 GitHub
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://linkedin.com/in/yourusername"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "#0077b5", textDecoration: "none" }}
-            >
-              💼 LinkedIn
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://twitter.com/yourusername"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "#1da1f2", textDecoration: "none" }}
-            >
-              🐦 Twitter
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      {/* Simple Contact Form */}
       <form
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "1rem",
-          marginTop: "1rem",
-        }}
+        onSubmit={handleSubmit}
+        style={{ display: "flex", flexDirection: "column", gap: "1rem", marginTop: "1rem" }}
       >
         <input
           type="text"
+          name="name"
           placeholder="Your Name"
+          value={formData.name}
+          onChange={handleChange}
           required
-          style={{ padding: "0.75rem", borderRadius: "5px", border: "1px solid #ccc" }}
         />
         <input
           type="email"
+          name="email"
           placeholder="Your Email"
+          value={formData.email}
+          onChange={handleChange}
           required
-          style={{ padding: "0.75rem", borderRadius: "5px", border: "1px solid #ccc" }}
         />
         <textarea
+          name="message"
           placeholder="Your Message"
           rows="5"
+          value={formData.message}
+          onChange={handleChange}
           required
-          style={{ padding: "0.75rem", borderRadius: "5px", border: "1px solid #ccc" }}
-        ></textarea>
-        <button
-          type="submit"
-          style={{
-            padding: "0.75rem",
-            border: "none",
-            borderRadius: "5px",
-            background: "#222",
-            color: "#fff",
-            cursor: "pointer",
-          }}
-        >
-          Send Message
-        </button>
+        />
+        <button type="submit">Send Message</button>
       </form>
+
+      {status && <p>{status}</p>}
     </section>
   );
 }
