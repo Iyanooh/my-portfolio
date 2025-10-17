@@ -19,7 +19,7 @@ services:
     # --- START OF FIX ---
     # Set the build context to the root directory (.) so it can find server.js
     build: 
-      context: . 
+      context: ./backend
       # Explicitly specify the Dockerfile path since the context is now the root
       dockerfile: backend/Dockerfile
     # --- END OF FIX ---
